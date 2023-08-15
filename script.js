@@ -18,14 +18,20 @@ const getComputerChoice = () => {
     }
 }
 
+let chooseRock = document.querySelector('#pickRock');
+let choosePaper = document.querySelector('#paper');
+let chooseScissors = document.querySelector('#scissors');
+chooseRock.addEventListener('click', () => alert("Rock!"));
+choosePaper.addEventListener('click', () => console.log("Paper"));
+chooseScissors.addEventListener('click', playRound("Scissors"));
+
 const game = () => {
     userScore = 0;
     computerScore = 0;
     rounds = 0;
 
-    const playRound = (userSelection, computerSelection) => {
-        userInput = prompt("Rock, Paper, Scissors?", "Rock").toLowerCase();
-        userSelection = userInput.charAt(0).toUpperCase() + userInput.slice(1);
+    const playRound = (weapon) => {
+        userSelection = weapon;
         computerSelection = getComputerChoice();
 
         if (userSelection === 'Rock' && computerSelection === 'Scissors' || 
@@ -33,37 +39,21 @@ const game = () => {
             userSelection === 'Scissors' && computerSelection === 'Paper') {
             userScore+=1;
             return `You Win! ${userSelection} beats ${computerSelection}!`;
+            userScore ++;
         }
         else if (userSelection === 'Rock' && computerSelection === 'Paper' || 
                  userSelection === 'Paper' && computerSelection === 'Scissors' || 
                  userSelection === 'Scissors' && computerSelection === 'Rock') {
             computerScore+=1;
             return `You Lose! ${userSelection} beats ${computerSelection}!`;
+            computerScore++;
                  }
         else {
             return `It's a tie!`;
         }
-    }
-
-    for (rounds = 1; rounds <= 5; rounds++) {
-        console.log(playRound(userSelection, computerSelection));
-        console.log(`Round: ${rounds}`);
-        console.log(`User Score: ${userScore}`);
-        console.log(`Computer Score: ${computerScore}`);
-    
-    }
-
-    if (userScore > computerScore) {
-        console.log("User wins the game!");
-    }
-    else if (computerScore > userScore) {
-        console.log("Computer wins the game!");
-    }
-    else {
-        console.log("It's a tie! Everybody wins!");
+        rounds++;
     }
 
 }
 
 game();
-
