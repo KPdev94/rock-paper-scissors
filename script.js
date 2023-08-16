@@ -1,80 +1,74 @@
-let userInput;
-let userSelection;
-let computerSelection;
-let userScore;
-let computerScore;
-let rounds;
+let userScore = 0;
+let computerScore = 0;
+let userInt = 0;
+let computerInt = 0;
+
+const board = document.querySelector('#roundState');
+const buttons = document.querySelectorAll('button');
+const user = document.querySelector('#userScore');
+const computer = document.querySelector('#computerScore');
+
+
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        userWeapon = button.id;
+        if (userWeapon == 'Rock') userInt = 0;
+        else if (userWeapon == 'Paper') userInt = 1;
+        else if (userWeapon == 'Scissors') userInt = 2;
+        computerInt = getComputerChoice();
+        game();
+    })
+})
+
 
 const getComputerChoice = () => {
-    let rand = Math.floor(Math.random() * 3) + 1;
-    if (rand === 1) {
-        return 'Rock';
+    let numChoice = Math.floor(Math.random() * 3);
+    if (numChoice === 0) {
+        computerWeapon = 'Rock';
     }
-    else if (rand === 2) {
-        return 'Paper';
+    else if (numChoice === 1) {
+        computerWeapon = 'Paper';
     }
-    else if (rand === 3) {
-        return 'Scissors';
+    else if (numChoice === 2) {
+        computerWeapon = 'Scissors';
+    }
+    return numChoice;
+}
+const playRound = () => {
+    winArray = [[0,2,1],
+                [1,0,2],
+                [2,1,0]];
+    
+    let result = winArray[userInt][computerInt];
+
+    if (result == 0) {
+        board.innerHTML = `It's a tie!`
+    }
+    else if (result == 1) {
+        board.innerHTML = `You win the round! ${userWeapon} beats ${computerWeapon}.`
+        userScore++;
+    }
+    else if (result == 2) {
+        board.innerHTML = `You lose the round! ${computerWeapon} beats ${userWeapon}.`
+        computerScore++;
     }
 }
 
 const game = () => {
-    
-    userScore = 0;
-    computerScore = 0;
-    rounds = 0;
+    playRound();
 
-    const ui = document.querySelector('.gameUI');
-    ui.style.visibility = 'visible';
+    user.innerHTML = userScore;
+    computer.innerHTML = computerScore;
 
-    const board = document.querySelector('#roundState');
-    board.innerHTML = `Let the game begin!`;
-
-    const playRound = (weapon) => {
-        userSelection = weapon;
-        computerSelection = getComputerChoice();
-        const userScoreboard = document.querySelector('#userScore');
-        const computerScoreboard = document.querySelector('#computerScore');
-
-        if (userSelection === 'Rock' && computerSelection === 'Scissors' || 
-            userSelection === 'Paper' && computerSelection === 'Rock' ||
-            userSelection === 'Scissors' && computerSelection === 'Paper') {
-            userScore+=1;
-            board.innerHTML = `You Win! ${userSelection} beats ${computerSelection}!`;
-        }
-        else if (userSelection === 'Rock' && computerSelection === 'Paper' || 
-                userSelection === 'Paper' && computerSelection === 'Scissors' || 
-                userSelection === 'Scissors' && computerSelection === 'Rock') {
-            computerScore+=1;
-            board.innerHTML = `You Lose! ${userSelection} beats ${computerSelection}!`;
-                }
-        else {
-            board.innerHTML = `It's a tie!`;
-        }
-        rounds++;
-        userScoreboard.innerHTML = userScore;
-        computerScoreboard.innerHTML = computerScore;
-
-        if(userScore == 5) {
-            board.innerHTML = `You have won! The world is saved!`;
-            return
-            
-        }
-        else if (computerScore == 5) {
-            board.innerHTML = `You have lost. Thanks for nothing, scrub.`;
-            return
-        }
+    if(userScore == 5) {
+        board.innerHTML = 'You win! You saved the day!';
+        userScore = 0;
+        computerScore = 0;
     }
-    const pickRock = document.querySelector("#rock");
-    pickRock.addEventListener('click', () => playRound("Rock"));
+    if(computerScore == 5) {
+        board.innerHTML = 'You lose. Thanks for nothing, shmuck.';
+        userScore = 0;
+        computerScore = 0;
+    }
+}
 
-    const pickPaper = document.querySelector('#paper');
-    pickPaper.addEventListener('click', () => playRound("Paper"));
-
-    const pickScissors = document.querySelector('#scissors');
-    pickScissors.addEventListener('click', () => playRound("Scissors"));
-
-} 
-
-const startBtn = document.querySelector('#startGame');
-startBtn.addEventListener('click', game);
