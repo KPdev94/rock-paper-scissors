@@ -7,6 +7,9 @@ const board = document.querySelector('#roundState');
 const buttons = document.querySelectorAll('button');
 const user = document.querySelector('#userScore');
 const computer = document.querySelector('#computerScore');
+const ui = document.querySelector('.gameUI');
+const againBtn = document.querySelector('#playAgain');
+const gameBtn = document.querySelector('.gameBtn');
 
 
 buttons.forEach(button => {
@@ -20,6 +23,15 @@ buttons.forEach(button => {
     })
 })
 
+againBtn.addEventListener('click', () => {
+    user.textContent = 0;
+    computer.textContent = 0;
+    userScore = 0;
+    computerScore = 0;
+    ui.style.visibility = 'visible';
+    playAgain.style.visibility = 'hidden';
+    board.textContent = ``;
+})
 
 const getComputerChoice = () => {
     let numChoice = Math.floor(Math.random() * 3);
@@ -42,14 +54,14 @@ const playRound = () => {
     let result = winArray[userInt][computerInt];
 
     if (result == 0) {
-        board.innerHTML = `It's a tie!`
+        board.textContent = `It's a tie!`
     }
     else if (result == 1) {
-        board.innerHTML = `You win the round! ${userWeapon} beats ${computerWeapon}.`
+        board.textContent = `You win the round! ${userWeapon} beats ${computerWeapon}.`
         userScore++;
     }
     else if (result == 2) {
-        board.innerHTML = `You lose the round! ${computerWeapon} beats ${userWeapon}.`
+        board.textContent = `You lose the round! ${computerWeapon} beats ${userWeapon}.`
         computerScore++;
     }
 }
@@ -57,18 +69,18 @@ const playRound = () => {
 const game = () => {
     playRound();
 
-    user.innerHTML = userScore;
-    computer.innerHTML = computerScore;
+    user.textContent = userScore;
+    computer.textContent = computerScore;
 
-    if(userScore == 5) {
-        board.innerHTML = 'You win! You saved the day!';
-        userScore = 0;
-        computerScore = 0;
+    if(userScore === 5) {
+        board.textContent = 'You win! You saved the day!';
+        ui.style.visibility = 'hidden';
+        playAgain.style.visibility = 'visible';
     }
-    if(computerScore == 5) {
-        board.innerHTML = 'You lose. Thanks for nothing, shmuck.';
-        userScore = 0;
-        computerScore = 0;
+    if(computerScore === 5) {
+        board.textContent = 'You lose. Thanks for nothing, shmuck.';
+        ui.style.visibility = 'hidden';
+        playAgain.style.visibility = 'visible';
     }
 }
 
